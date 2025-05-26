@@ -82,7 +82,7 @@ export default async function NewTicket() {
                 Selecione o cliente
               </label>
               <select
-                className="w-full border-2 rounded-md px-2 mb-2 h-11 resize-none bg-white"
+                className="w-full border-2 rounded-md px-2 mb-2 h-11 resize-none bg-white cursor-pointer"
                 name="customer"
               >
                 {customers.map((customer) => (
