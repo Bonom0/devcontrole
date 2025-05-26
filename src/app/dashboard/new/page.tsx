@@ -105,7 +105,7 @@ export default async function NewTicket() {
 
           <button
             type="submit"
-            className="bg-blue-500 text-white font-bold px-2 h-11 rounded-md my-4 cursor-pointe disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="bg-blue-500 text-white font-bold px-2 h-11 rounded-md my-4 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
             disabled={customers.length === 0}
           >
             Cadastrar
