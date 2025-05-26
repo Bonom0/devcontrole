@@ -5,8 +5,9 @@ import { Input } from "@/components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { FormTicket } from "./components/formTicket";
 
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiX } from "react-icons/fi";
 
 const schema = z.object({
   email: z
@@ -23,10 +24,7 @@ interface CustomerDataInfo {
 }
 
 export default function OpenTicket() {
-  const [customer, setCustomer] = useState<CustomerDataInfo | null>({
-    id: "1",
-    name: "Caio",
-  });
+  const [customer, setCustomer] = useState<CustomerDataInfo | null>(null);
 
   const {
     register,
@@ -37,12 +35,27 @@ export default function OpenTicket() {
     resolver: zodResolver(schema),
   });
 
+  function handleClearCustomer() {
+    setCustomer(null);
+    setValue("email", "");
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto px-2">
       <h1 className="font-bold text-3xl text-center mt-24">Abrir Chamado</h1>
       <main className="flex flex-col mt-4 mb-2">
         {customer ? (
-          <div></div>
+          <div className="bg-slate-100 py-6 px-4 rounded flex items-center justify-between">
+            <p className="text-lg">
+              <strong>Cliente selecionado:</strong> {customer.name}
+            </p>
+            <button
+              className="h-11 px-2 flex items-center justify-center rounded cursor-pointer"
+              onClick={handleClearCustomer}
+            >
+              <FiX size={30} color="#FF2929" />
+            </button>
+          </div>
         ) : (
           <form className="bg-slate-100 py-6 px-2 rounded">
             <div className="flex flex-col gap-3">
@@ -54,12 +67,14 @@ export default function OpenTicket() {
                 register={register}
               />
 
-              <button className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded">
+              <button className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded cursor-pointer">
                 Procurar Clientes <FiSearch size={24} color="#FFF" />{" "}
               </button>
             </div>
           </form>
         )}
+
+        {customer !== null && <FormTicket />}
       </main>
     </div>
   );
