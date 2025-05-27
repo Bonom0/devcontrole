@@ -5,15 +5,13 @@ import { Input } from "@/components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { FormTicket } from "./components/formTicket";
 
+import { FormTicket } from "./components/formTicket";
 import { FiSearch, FiX } from "react-icons/fi";
+import { api } from "@/lib/api";
 
 const schema = z.object({
-  email: z
-    .string()
-    .email("Digite o email do cliente para localizar.")
-    .min(1, "O email é obrigatório."),
+  email: z.string().email("Digite o email do cliente para localizar.").min(1, "O email é obrigatório.")
 });
 
 type FormData = z.infer<typeof schema>;
@@ -38,6 +36,19 @@ export default function OpenTicket() {
   function handleClearCustomer() {
     setCustomer(null);
     setValue("email", "");
+  }
+
+  async function handleSearchCustomer(data: FormData) {
+    const response = await api.get("/api/customer", {
+      params: {
+        email: data.email,
+      },
+    });
+
+    setCustomer({
+      id: response.data.id,
+      name: response.data.name
+    })
   }
 
   return (
@@ -67,7 +78,11 @@ export default function OpenTicket() {
                 register={register}
               />
 
-              <button className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded cursor-pointer">
+              <button
+                type="submit"
+                className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded cursor-pointer"
+                onSubmit={handleSubmit(handleSearchCustomer)}
+              >
                 Procurar Clientes <FiSearch size={24} color="#FFF" />{" "}
               </button>
             </div>
