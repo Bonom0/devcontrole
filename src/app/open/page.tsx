@@ -1,69 +1,49 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Input } from "@/components/input";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { FormTicket } from "./components/formTicket";
-import { FiSearch, FiX } from "react-icons/fi";
-import { api } from "@/lib/api";
+import { useState } from "react"
+import { Input } from "@/components/input"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { FiSearch, FiX } from "react-icons/fi"
+import { FormTicket } from "./components/FormTicket"
 
 const schema = z.object({
-  email: z.string().email("Digite o email do cliente para localizar.").min(1, "O email é obrigatório.")
-});
+  email: z.string().email("Digite o e-mail do cliente para localizar").min(1, "O campo e-mail é obrigatório")
+})
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof schema>
 
-interface CustomerDataInfo {
+interface CustomerDataInfo{
   id: string;
   name: string;
 }
 
-export default function OpenTicket() {
-  const [customer, setCustomer] = useState<CustomerDataInfo | null>(null);
+export default function OpenTicket(){
+  const [customer, setCustomer] = useState<CustomerDataInfo | null>({
+    id: "1",
+    name: "Caio"
+  })
+  
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema)
+  })
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
-
-  function handleClearCustomer() {
+  function handleClearCustomer(){
     setCustomer(null);
     setValue("email", "");
   }
 
-  async function handleSearchCustomer(data: FormData) {
-    const response = await api.get("/api/customer", {
-      params: {
-        email: data.email,
-      },
-    });
-
-    setCustomer({
-      id: response.data.id,
-      name: response.data.name
-    })
-  }
-
-  return (
+  return(
     <div className="w-full max-w-2xl mx-auto px-2">
       <h1 className="font-bold text-3xl text-center mt-24">Abrir Chamado</h1>
+
       <main className="flex flex-col mt-4 mb-2">
-        {customer ? (
+        
+        { customer ? (
           <div className="bg-slate-100 py-6 px-4 rounded flex items-center justify-between">
-            <p className="text-lg">
-              <strong>Cliente selecionado:</strong> {customer.name}
-            </p>
-            <button
-              className="h-11 px-2 flex items-center justify-center rounded cursor-pointer"
-              onClick={handleClearCustomer}
-            >
+            <p className="text-lg"><strong>Cliente selecionado:</strong> {customer.name}</p>
+            <button className="h-11 px-2 flex items-center justify-center rounded cursor-pointer" onClick={handleClearCustomer}>
               <FiX size={30} color="#FF2929" />
             </button>
           </div>
@@ -72,25 +52,24 @@ export default function OpenTicket() {
             <div className="flex flex-col gap-3">
               <Input
                 name="email"
-                placeholder="Digite o email do cliente"
+                placeholder="Digite o e-mail do cliente..."
                 type="text"
                 error={errors.email?.message}
                 register={register}
               />
 
-              <button
-                type="submit"
-                className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded cursor-pointer"
-                onSubmit={handleSubmit(handleSearchCustomer)}
-              >
-                Procurar Clientes <FiSearch size={24} color="#FFF" />{" "}
+              <button className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded cursor-pointer">
+                Procurar cliente
+                <FiSearch size={24} color="#FFF" />
               </button>
+
             </div>
           </form>
         )}
 
-        {customer !== null && <FormTicket />}
+        { customer !== null && <FormTicket/> }
+
       </main>
     </div>
-  );
+  )
 }
