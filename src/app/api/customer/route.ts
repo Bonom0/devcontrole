@@ -9,7 +9,7 @@ export async function GET(request: Request){
   const customerEmail = searchParams.get("email");
 
   if(!customerEmail || customerEmail === ""){
-    return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    return NextResponse.json({ error: "Customer not found" }, { status: 400 })   
   }
 
   try {
@@ -19,13 +19,10 @@ export async function GET(request: Request){
       }
     })
 
-    return NextResponse.json(customer, { status: 200 });
-    
+    return NextResponse.json(customer);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch customer" }, { status: 400 });
+    return NextResponse.json({ error: "Customer not found" }, { status: 400 })
   }
-
-  return Response.json({ message : "Recebido" });
 }
 
 export async function DELETE(request: Request){
