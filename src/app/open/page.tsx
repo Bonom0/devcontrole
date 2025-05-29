@@ -58,7 +58,7 @@ export default function OpenTicket(){
                 register={register}
               />
 
-              <button className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded cursor-pointer">
+              <button type="submit" className="bg-blue-500 flex flex-row gap-3 px-2 h-11 items-center justify-center text-white font-bold rounded cursor-pointer">
                 Procurar cliente
                 <FiSearch size={24} color="#FFF" />
               </button>
