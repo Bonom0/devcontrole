@@ -6,7 +6,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { FiSearch, FiX } from "react-icons/fi"
-import { FormTicket } from "./components/FormTicket"
+import { FormTicket } from "@/app/open/components/FormTicket"
 import { api } from "@/lib/api"
 
 const schema = z.object({
